@@ -46,7 +46,7 @@ export class AuctionFactorySmartContractService {
   //
   async getAuctions() {
     const auctions = await this.factoryContract.methods[
-      'getAuctions'
+      'getAllAuctions'
     ]().call({
       from: this.account,
     });
@@ -61,16 +61,16 @@ export class AuctionFactorySmartContractService {
     });
     return auction;
   }
-  //
-  // async getNonActivePollResults() {
-  //   const nonActivePollResults = await this.pollsContract.methods[
-  //     'getNonActivePollResults'
-  //   ]().call({
-  //     from: this.account,
-  //   });
-  //   return nonActivePollResults.filter((result) => result.poll != addressZero);
-  // }
-  //
+
+  async getRatingsForCreator(address: string) {
+    const ratings = await this.factoryContract.methods[
+      'ratings'
+    ](address).call({
+      from: this.account,
+    });
+    return ratings;
+  }
+
   // async rate(poll: string, mark: number) {
   //   await this.pollsContract.methods['rate'](poll, mark).send({
   //     from: this.account,

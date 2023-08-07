@@ -3,37 +3,29 @@ pragma solidity ^0.8.0;
 import "./Auction.sol";
 
 contract AuctionFactory {
-    address[] public auctions;
 
-    function createAuction(uint256 _duration, string memory _name) public {
-        address newAuction = address(new Auction(msg.sender, _duration, _name));
-        auctions.push(newAuction);
+    struct Organiser {
+        bool active;
+        uint ratingSum;
+        uint numberOfRates;
     }
 
-    function getAuctions() public view returns (address[] memory) {
-        return auctions;
-    }
+    address[] public owners;
+    mapping(address => Organiser) public ratings;
+    mapping(address => mapping(address => mapping(address => bool))) public hasVoted;
 
-    function getActiveAuctions() public view returns (address[] memory) {
-        uint256 activeAuctionCount = 0;
-        for (uint256 i = 0; i < auctions.length; i++) {
-            Auction auction = Auction(auctions[i]);
-            if (auction.state() == AuctionState.Active) {
-                activeAuctionCount++;
-            }
+    address[] public allAuctions;
+
+    function createAuction(uint _biddingTime, string memory _name) public returns(address createdAuction) {
+        Auction newSimpleAuction = new Auction(_biddingTime, _name, payable(msg.sender));
+        allAuctions.push(address(newSimpleAuction));
+
+        if(!ratings[msg.sender].active) {
+            ratings[msg.sender].active = true;
+            owners.push(msg.sender);
         }
 
-        address[] memory activeAuctions = new address[](activeAuctionCount);
-        uint256 currentIndex = 0;
-        for (uint256 i = 0; i < auctions.length; i++) {
-            Auction auction = Auction(auctions[i]);
-            if (auction.state() == AuctionState.Active) {
-                activeAuctions[currentIndex] = auctions[i];
-                currentIndex++;
-            }
-        }
-
-        return activeAuctions;
+        return address(newSimpleAuction);
     }
 
     function getAuctionDetails(address auctionAddress) public view returns (
@@ -41,30 +33,48 @@ contract AuctionFactory {
         uint256 auctionEndTime,
         address highestBidder,
         uint256 highestBid,
-        string memory auctionName,
-        AuctionState state
+        string memory auctionName
     ) {
         Auction auction = Auction(auctionAddress);
         return (
-            auction.seller(),
+            auction.beneficiary(),
             auction.auctionEndTime(),
             auction.highestBidder(),
             auction.highestBid(),
-            auction.auctionName(),
-            auction.state()
+            auction.auctionName()
         );
     }
 
-    function getRatingsForSeller(address sellerAddress) public view returns (uint256[] memory) {
-        uint256[] memory ratings;
-        for (uint256 i = 0; i < auctions.length; i++) {
-            Auction auction = Auction(auctions[i]);
-            if (auction.seller() == sellerAddress && auction.state() == AuctionState.Ended && auction.sellerRated()) {
-                ratings[i] = auction.getSellerRating();
-            }
-        }
-        return ratings;
+    function getAllAuctions() public view returns(address[] memory) {
+        return allAuctions;
     }
 
+    function getOwners() public view returns(address[] memory) {
+        return owners;
+    }
+
+    function canRate(address owner, address auction) public view returns(bool) {
+        if(msg.sender == owner
+            || !ratings[owner].active
+            || block.timestamp > Auction(auction).auctionEndTime()
+            || owner != Auction(auction).beneficiary()
+            || hasVoted[owner][auction][msg.sender]) {
+            return false;
+        }
+        if (Auction(auction).highestBidder() != msg.sender
+            && Auction(auction).pendingReturns(msg.sender) == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    function rate(address owner, address auction, uint8 rate) public {
+        require(rate <= 5, "Maximum value for rate is 5.");
+        require(rate > 0, "Minimum value for rate is 1.");
+        require(canRate(owner, auction), "You're not allowed to rate.");
+        hasVoted[owner][auction][msg.sender] = true;
+        ratings[owner].ratingSum += rate;
+        ratings[owner].numberOfRates++;
+    }
 
 }

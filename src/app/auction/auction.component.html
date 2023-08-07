@@ -1,6 +1,6 @@
-<!--<mat-spinner *ngIf="isLoading"></mat-spinner>-->
 <div class="wrapper" *ngIf="address != undefined">
-  <mat-card class="example-card">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-card class="example-card" *ngIf="!isLoading">
     <mat-card-header>
       <mat-card-title>{{ details.auctionName }}</mat-card-title>
       <mat-card-subtitle>Auction address: {{ address }}</mat-card-subtitle>
@@ -13,20 +13,32 @@
         <label class="block"> <b>Seller:</b> {{ details.seller }} </label>
       </div>
       <div class="form-group">
-        <label class="block"> <b>Seller's rating:</b> 4.3/5 </label>
-      </div>
-      <div class="form-group">
         <label class="block">
           <b>End time:</b> {{ unixTimestampToDate(details.auctionEndTime) }}
         </label>
       </div>
+      <mat-divider></mat-divider>
+      <h3><b>Seller's rating</b></h3>
+      <div class="form-group">
+        <label class="block"> <b>Number of ratings:</b> {{ratings.numberOfRates}} </label>
+      </div>
+      <div class="form-group">
+        <label class="block"> <b>Rating sum:</b> {{ratings.ratingSum}} </label>
+      </div>
       <br />
-
+      <mat-divider></mat-divider>
+      <h3><b>Bidding</b></h3>
+      <div class="form-group">
+        <label class="block"> <b>Highest bidder:</b> {{details.highestBidder}} </label>
+      </div>
+      <div class="form-group">
+        <label class="block"> <b>Highest bid:</b> {{weiToEth(details.highestBid)}}  ETH</label>
+      </div>
       <div class="load-auction--wrapper">
         <div class="form-group">
-          <label class="block">Bidding: </label>
+          <label class="block">How much do you bid (ETH): </label>
           <input type="text" [(ngModel)]="bid" /><button
-                mat-button
+                mat-button type="button" (click)="placeBid()"
         >
           Bid
         </button>
