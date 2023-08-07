@@ -36,7 +36,15 @@ contract Auction {
         _;
     }
 
-    function placeBid() public payable {
+    modifier checkAuctionState() {
+        if (state == AuctionState.Active && block.timestamp >= auctionEndTime) {
+            state = AuctionState.Ended;
+            emit AuctionEnded(highestBidder, highestBid);
+        }
+        _;
+    }
+
+    function placeBid() public payable checkAuctionState {
         require(state == AuctionState.Active, "Auction is not active");
         require(msg.value > highestBid, "Bid amount too low");
 
@@ -49,7 +57,7 @@ contract Auction {
         highestBid = msg.value;
     }
 
-    function withdraw() public {
+    function withdraw() public checkAuctionState {
         require(state == AuctionState.Ended, "Auction is not ended");
         require(!hasWithdrawn[msg.sender], "Already withdrawn");
 
@@ -60,7 +68,7 @@ contract Auction {
         }
     }
 
-    function endAuction() public onlySeller onlyAfterEnd {
+    function endAuction() public onlySeller onlyAfterEnd checkAuctionState {
         require(state == AuctionState.Active, "Auction is not active");
 
         state = AuctionState.Ended;
@@ -69,7 +77,7 @@ contract Auction {
         seller.transfer(highestBid);
     }
 
-    function rateSeller(uint256 rating) public {
+    function rateSeller(uint256 rating) public checkAuctionState {
         require(state == AuctionState.Ended, "Auction is not ended");
         require(msg.sender == highestBidder, "Only highest bidder can rate the seller");
         require(!sellerRated, "Seller already rated");

@@ -20,6 +20,6 @@ export class AuctionsComponent implements OnInit {
 
     this.activeAuction = await this.auctionFactorySmartContractService.getAuctions();
 
-      this.isLoading = false;
+    this.isLoading = false;
   }
 }

@@ -52,6 +52,15 @@ export class AuctionFactorySmartContractService {
     });
     return auctions.filter((act) => act != addressZero);
   }
+
+  async getAuctionDetails(address: string) {
+    const auction = await this.factoryContract.methods[
+        'getAuctionDetails'
+        ](address).call({
+      from: this.account,
+    });
+    return auction;
+  }
   //
   // async getNonActivePollResults() {
   //   const nonActivePollResults = await this.pollsContract.methods[

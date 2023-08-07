@@ -14,6 +14,28 @@ contract AuctionFactory {
         return auctions;
     }
 
+    function getActiveAuctions() public view returns (address[] memory) {
+        uint256 activeAuctionCount = 0;
+        for (uint256 i = 0; i < auctions.length; i++) {
+            Auction auction = Auction(auctions[i]);
+            if (auction.state() == AuctionState.Active) {
+                activeAuctionCount++;
+            }
+        }
+
+        address[] memory activeAuctions = new address[](activeAuctionCount);
+        uint256 currentIndex = 0;
+        for (uint256 i = 0; i < auctions.length; i++) {
+            Auction auction = Auction(auctions[i]);
+            if (auction.state() == AuctionState.Active) {
+                activeAuctions[currentIndex] = auctions[i];
+                currentIndex++;
+            }
+        }
+
+        return activeAuctions;
+    }
+
     function getAuctionDetails(address auctionAddress) public view returns (
         address payable seller,
         uint256 auctionEndTime,

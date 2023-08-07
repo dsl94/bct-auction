@@ -9,30 +9,19 @@
 // export class SimpleAuctionSmartContractService {
 //   private simpleAuctionContract;
 //   private account;
-//   isPrivateSubject = new Subject<boolean>();
-//   private isPrivate: boolean;
 //
 //   constructor(private smartContractService: SmartContractService) {
 //     this.account = this.smartContractService.getAccount();
 //   }
 //
 //   async setSimpleAuctionContract(auctionAddress: string) {
-//     this.isPrivate = true;
-//     this.isPrivateSubject.next(this.isPrivate);
 //     this.simpleAuctionContract =
-//       this.smartContractService.getPrivatePollContract(pollAddress);
+//       this.smartContractService.getAuctionContract(auctionAddress);
 //     const creator = await this.getCreator();
-//     const voter = await this.getVoter(creator);
-//     if (!voter.canVote) {
-//       this.isPrivate = false;
-//       this.isPrivateSubject.next(this.isPrivate);
-//       this.simplePollContract =
-//         this.smartContractService.getPublicPollContract(pollAddress);
-//     }
 //   }
 //
 //   async getCreator() {
-//     const creator = await this.simplePollContract.methods['creator']().call();
+//     const creator = await this.simpleAuctionContract.methods['creator']().call();
 //     return creator;
 //   }
 //
