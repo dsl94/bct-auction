@@ -105,6 +105,10 @@ contract Auction {
         return true;
     }
 
+    function hasAuctionEnded() public view returns (bool) {
+        return ended;
+    }
+
     /// End the auction and send the highest bid
     /// to the beneficiary.
     function auctionEnd() external {

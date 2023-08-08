@@ -33,4 +33,20 @@ export class SimpleAuctionSmartContractService {
     return response;
   }
 
+  async endAuction(auctionAddress) {
+    let simpleAuctionContract =
+        this.smartContractService.getAuctionContract(auctionAddress);
+
+    const response = await simpleAuctionContract.methods['auctionEnd']().send({
+      from: this.account,
+    });
+    return response;
+  }
+
+  async getStatus(auctionAddress) {
+    let simpleAuctionContract =
+        this.smartContractService.getAuctionContract(auctionAddress);
+    const status = await simpleAuctionContract.methods['beneficiary']().call();
+    return status;
+  }
 }

@@ -33,7 +33,8 @@ contract AuctionFactory {
         uint256 auctionEndTime,
         address highestBidder,
         uint256 highestBid,
-        string memory auctionName
+        string memory auctionName,
+        bool ended
     ) {
         Auction auction = Auction(auctionAddress);
         return (
@@ -41,7 +42,8 @@ contract AuctionFactory {
             auction.auctionEndTime(),
             auction.highestBidder(),
             auction.highestBid(),
-            auction.auctionName()
+            auction.auctionName(),
+            auction.hasAuctionEnded()
         );
     }
 

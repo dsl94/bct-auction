@@ -34,7 +34,7 @@
       <div class="form-group">
         <label class="block"> <b>Highest bid:</b> {{weiToEth(details.highestBid)}}  ETH</label>
       </div>
-      <div class="load-auction--wrapper">
+      <div *ngIf="!isSeller()" class="load-auction--wrapper">
         <div class="form-group">
           <label class="block">How much do you bid (ETH): </label>
           <input type="text" [(ngModel)]="bid" /><button
@@ -44,6 +44,8 @@
         </button>
         </div>
       </div>
+      <h3><span style="color: red"> {{error}}</span></h3>
+      <h3 *ngIf="isSeller()"><span style="color: blueviolet"> You can't bid on your own auction</span></h3>
     </mat-card-content>
   </mat-card>
 </div>

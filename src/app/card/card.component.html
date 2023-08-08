@@ -1,11 +1,13 @@
 <mat-card class="auction-card">
   <mat-card-title>{{ details.auctionName }}</mat-card-title>
   <mat-card-content>
-    <p>Highest Bid: {{ details.highestBid }}</p>
+    <p>Highest Bid: {{ weiToEth(details.highestBid) }} ETH</p>
     <p>Address: {{ address }}</p>
     <p>End time: {{ unixTimestampToDate(details.auctionEndTime) }}</p>
   </mat-card-content>
   <mat-card-actions>
-    <a [routerLink]="['/auction', address]"  mat-button color="primary">More Info</a>
+    <a *ngIf="!isAuctionTimePassed()" [routerLink]="['/auction', address]"  mat-button color="primary">Details and bid</a>
+    <button *ngIf="canEnd()" type="button" (click)="endAuction()" mat-button color="accent">End auction</button>
+    <p *ngIf="!canEnd() && isAuctionTimePassed()" style="color: #45a049">Auction ended</p>
   </mat-card-actions>
 </mat-card>
