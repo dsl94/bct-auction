@@ -1,2 +1,2 @@
-const address = '0xB32209799323bfE76500F2F840Bd95925818a271';
+const address = '0x3C646BF8372Bd240CB84A4985276c20Aa632066C';
 module.exports = { address };

@@ -28,7 +28,6 @@ export class CreateAuctionComponent implements OnInit {
       this.error = false;
       this.errorMessage = '';
       const durationInSeconds: number = this.calculateDurationInSeconds();
-      console.log(durationInSeconds);
       this.auctionFactorySmartContractService.createAuction(
           this.name,
           durationInSeconds

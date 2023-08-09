@@ -27,26 +27,9 @@ export class AuctionFactorySmartContractService {
     });
   }
 
-  // async createPublicPoll(
-  //   subject: string,
-  //   descr: string,
-  //   proposalNames: string[],
-  //   duration: number
-  // ) {
-  //   await this.pollsContract.methods['createPublicPoll'](
-  //     subject,
-  //     descr,
-  //     proposalNames,
-  //     duration
-  //   ).send({
-  //     from: this.account,
-  //     gas: GAS,
-  //   });
-  // }
-  //
   async getAuctions() {
     const auctions = await this.factoryContract.methods[
-      'getAuctions'
+      'getAllAuctions'
     ]().call({
       from: this.account,
     });
@@ -61,48 +44,35 @@ export class AuctionFactorySmartContractService {
     });
     return auction;
   }
-  //
-  // async getNonActivePollResults() {
-  //   const nonActivePollResults = await this.pollsContract.methods[
-  //     'getNonActivePollResults'
-  //   ]().call({
-  //     from: this.account,
-  //   });
-  //   return nonActivePollResults.filter((result) => result.poll != addressZero);
-  // }
-  //
-  // async rate(poll: string, mark: number) {
-  //   await this.pollsContract.methods['rate'](poll, mark).send({
-  //     from: this.account,
-  //     gas: GAS,
-  //   });
-  // }
-  //
-  // async hasRated(creator: string, poll: string) {
-  //   return await this.pollsContract.methods['hasRated'](
-  //     creator,
-  //     poll,
-  //     this.account
-  //   ).call();
-  // }
-  //
-  // async getRating(address: string) {
-  //   const rating = await this.pollsContract.methods['ratings'](address).call();
-  //   return rating.rateNumber > 0
-  //     ? rating.totalRate / rating.rateNumber
-  //     : 'no ratings yet';
-  // }
-  //
-  // async getLastCreatedPoll() {
-  //   const activePolls = await this.pollsContract.methods[
-  //     'getActivePolls'
-  //   ]().call({
-  //     from: this.account,
-  //   });
-  //   return activePolls[activePolls.length - 1];
-  // }
+
+  async getRatingsForCreator(address: string) {
+    const ratings = await this.factoryContract.methods[
+      'ratings'
+    ](address).call({
+      from: this.account,
+    });
+    return ratings;
+  }
 
   getAccount() {
     return this.account;
+  }
+
+  async canRate(addressOwner: string, addressAuction: string) {
+    const canRate = await this.factoryContract.methods[
+        'canRate'
+        ](addressOwner, addressAuction).call({
+      from: this.account,
+    });
+    return canRate;
+  }
+
+  async rate(addressOwner: string, addressAuction: string, rate: number) {
+    const response = await this.factoryContract.methods[
+        'rate'
+        ](addressOwner, addressAuction, rate).send({
+      from: this.account,
+    });
+    return response;
   }
 }
