@@ -58,7 +58,7 @@ contract AuctionFactory {
     function canRate(address owner, address auction) public view returns(bool) {
         if(msg.sender == owner
             || !ratings[owner].active
-            || block.timestamp > Auction(auction).auctionEndTime()
+            || !Auction(auction).hasAuctionEnded()
             || owner != Auction(auction).beneficiary()
             || hasVoted[owner][auction][msg.sender]) {
             return false;

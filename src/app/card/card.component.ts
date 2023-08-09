@@ -17,14 +17,42 @@ export class CardComponent implements OnInit {
     highestBid: 0,
     auctionEndTime: 0,
     seller: '',
-    ended: false
+    ended: false,
+    highestBidder: ''
   }
+  canRate = false;
   constructor(private auctionFactoryService: AuctionFactorySmartContractService, private web3Service: Web3Service, private auctionService: SimpleAuctionSmartContractService) {}
 
   ngOnInit(): void {
+    this.load();
+  }
+
+  load() {
     this.auctionFactoryService.getAuctionDetails(this.address).then(d => {
       this.details = d;
+      if (this.details.auctionName != '') {
+        this.loadCanRate();
+      }
     });
+  }
+
+  loadCanRate() {
+    this.auctionFactoryService.canRate(this.details.seller, this.address).then(r => {
+      this.canRate = r;
+    });
+  }
+
+  rate(rating: number) {
+    this.loadCanRate();
+    if (this.canRate) {
+      this.auctionFactoryService.rate(this.details.seller, this.address, rating).then(res => {
+        this.load();
+      }).catch(e => {
+        alert(e);
+      })
+    } else {
+      alert("You can not rate")
+    }
   }
 
   weiToEth(value) {
@@ -65,5 +93,12 @@ export class CardComponent implements OnInit {
     unixTimestamp = Number(unixTimestamp);
     const date = new Date(unixTimestamp * 1000); // Unix timestamp is in seconds, so multiply by 1000 to convert to milliseconds
     return date.toLocaleString("sr"); // Returns the date in the local time zone and format
+  }
+
+  isBuyer() {
+    const isBuyer = this.web3Service.getAccount() == this.details.highestBidder;
+    const ended = this.details.ended;
+
+    return isBuyer && ended;
   }
 }

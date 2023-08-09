@@ -1,5 +1,5 @@
 <mat-card class="auction-card">
-  <mat-card-title>{{ details.auctionName }}</mat-card-title>
+  <mat-card-title>{{ details.auctionName }} <mat-icon *ngIf="isBuyer()" color="accent"><span class="material-icons">emoji_events</span></mat-icon></mat-card-title>
   <mat-card-content>
     <p>Highest Bid: {{ weiToEth(details.highestBid) }} ETH</p>
     <p>Address: {{ address }}</p>
@@ -8,6 +8,16 @@
   <mat-card-actions>
     <a *ngIf="!isAuctionTimePassed()" [routerLink]="['/auction', address]"  mat-button color="primary">Details and bid</a>
     <button *ngIf="canEnd()" type="button" (click)="endAuction()" mat-button color="accent">End auction</button>
-    <p *ngIf="!canEnd() && isAuctionTimePassed()" style="color: #45a049">Auction ended</p>
+    <h2 *ngIf="!canEnd() && isAuctionTimePassed()" style="color: #45a049; padding-left: 110px">Auction ended</h2>
   </mat-card-actions>
+  <mat-card-footer *ngIf="canRate">
+    <mat-card-content style="padding-left: 35px">
+      <h3>Rate</h3>
+      <button (click)="rate(1)" mat-raised-button color="primary">1</button>
+      <button (click)="rate(2)" mat-raised-button color="primary">2</button>
+      <button (click)="rate(3)" mat-raised-button color="primary">3</button>
+      <button (click)="rate(4)" mat-raised-button color="primary">4</button>
+      <button (click)="rate(5)" mat-raised-button color="primary">5</button>
+    </mat-card-content>
+  </mat-card-footer>
 </mat-card>

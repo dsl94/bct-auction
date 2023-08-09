@@ -4,7 +4,7 @@ import { Web3Service } from './web3.service';
 const auctionFactory = require('../../ethereum/build/AuctionFactory.json');
 const auction = require('../../ethereum/build/Auction.json');
 
-const mainAddress = '0x61a13F95D6CF35941aef6A4273b9d82746f7eB81';
+const mainAddress = '0x3C646BF8372Bd240CB84A4985276c20Aa632066C';
 //const testPublicPollAddress = '0xF954DD0aa09e3868824F901f893cA5fFCe704D35';
 
 @Injectable({
