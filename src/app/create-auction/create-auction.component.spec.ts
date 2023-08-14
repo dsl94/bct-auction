@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateAuctionComponent } from './create-auction.component';
 
-describe('CreatePollComponent', () => {
+describe('CreateAuctionComponent', () => {
   let component: CreateAuctionComponent;
   let fixture: ComponentFixture<CreateAuctionComponent>;
 

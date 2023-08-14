@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuctionFactorySmartContractService } from '../services/auction-factory-smart-contract.service';
 
 @Component({
-  selector: 'app-polls',
+  selector: 'app-auctions',
   templateUrl: './auctions.component.html',
   styleUrls: ['./auctions.component.scss'],
 })

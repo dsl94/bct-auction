@@ -9,7 +9,7 @@ import {Web3Service} from "../services/web3.service";
 // import {decrypt} from "ganache";
 
 @Component({
-  selector: 'app-poll',
+  selector: 'app-auction',
   templateUrl: './auction.component.html',
   styleUrls: ['./auction.component.scss'],
 })

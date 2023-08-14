@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "mocha src/ethereum/test/Polls.test.js"
+    "test": "mocha src/ethereum/test/Auctions.test.js"
   },
   "private": true,
   "dependencies": {

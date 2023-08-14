@@ -84,10 +84,7 @@ export class CreateAuctionComponent implements OnInit {
   }
 
   async navigate() {
-    // const lastCreatedPoll =
-    //   await this.pollsSmartContractService.getLastCreatedPoll();
-      //this.router.navigate([`../poll/${lastCreatedPoll}`]);
-    //this.router.navigate(['../polls']);
+
   }
 
   private resetValues() {

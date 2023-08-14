@@ -1,7 +1,7 @@
 <mat-spinner *ngIf="isLoading; else loaded"></mat-spinner>
 <ng-template #loaded>
   <p style="color: #171916;">Auctions</p>
-  <div class="polls--container">
+  <div class="auctions--container">
     <div class="card--wrapper" *ngFor="let addr of activeAuction">
       <app-card [address]="addr" [isActive]="true"></app-card>
     </div>
