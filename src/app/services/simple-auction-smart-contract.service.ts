@@ -49,4 +49,20 @@ export class SimpleAuctionSmartContractService {
     const status = await simpleAuctionContract.methods['beneficiary']().call();
     return status;
   }
+
+  async canWithdraw(auctionAddress, userAddress) {
+    let simpleAuctionContract =
+        this.smartContractService.getAuctionContract(auctionAddress);
+    const amount = await simpleAuctionContract.methods['pendingReturns'](userAddress).call();
+    return amount > 0;
+  }
+
+  async withdraw(auctionAddress) {
+    let simpleAuctionContract =
+        this.smartContractService.getAuctionContract(auctionAddress);
+    const success = await simpleAuctionContract.methods['withdraw']().send({
+      from: this.account,
+    });
+    return success;
+  }
 }

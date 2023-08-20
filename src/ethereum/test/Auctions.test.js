@@ -55,6 +55,40 @@ describe('Auction factory testing', function() {
         assert.ok(auctions[1]);
         assert.equal(auctions.length, 2); //
     });
+
+    it('can rate fail', async () => {
+        let canRate = await auctionFactorySmartContract.methods.canRate(accounts[0], auctionAddresses[0]).call({from: accounts[1]});
+        assert.equal(canRate, false);
+    });
+
+    it('rate fail', async () => {
+        try {
+            auctionFactorySmartContract.methods.rate(accounts[0], auctionAddresses[0], 5).call({from: accounts[1]});
+        } catch (e) {
+            assert(e);
+        }
+    });
+
+    it('can rate success', async () => {
+        await endedAuctionSmartContract.methods.bid().send({from: accounts[1], value: 100});
+        await sleep(1000);
+        await endedAuctionSmartContract.methods.auctionEnd().send({from: accounts[0], gas: 3000000});
+        await sleep(100);
+        let canRate = await auctionFactorySmartContract.methods.canRate(accounts[0], auctionAddresses[1]).call({from: accounts[1]});
+        // let ratings = await auctionFactorySmartContract.methods.ratings(accounts[0]).call({from: accounts[1]});
+        assert.equal(canRate, true)
+    });
+
+    it('rate success', async () => {
+        await endedAuctionSmartContract.methods.bid().send({from: accounts[1], value: 100});
+        await sleep(1000);
+        await endedAuctionSmartContract.methods.auctionEnd().send({from: accounts[0], gas: 3000000});
+        await sleep(100);
+        await auctionFactorySmartContract.methods.rate(accounts[0], auctionAddresses[1], 5).call({from: accounts[1]});
+        let ratings = await auctionFactorySmartContract.methods.ratings(accounts[0]).call({from: accounts[1]});
+        console.log(ratings)
+        assert(ratings)
+    });
 });
 
 describe('Auction smart contract testing', () => {

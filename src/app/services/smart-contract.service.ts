@@ -4,7 +4,7 @@ import { Web3Service } from './web3.service';
 const auctionFactory = require('../../ethereum/build/AuctionFactory.json');
 const auction = require('../../ethereum/build/Auction.json');
 
-const mainAddress = '0x3C646BF8372Bd240CB84A4985276c20Aa632066C';
+const mainAddress = '0xCC2DD3dF334db21A7A88D1737D188D9d07A3e991';
 
 @Injectable({
   providedIn: 'root',

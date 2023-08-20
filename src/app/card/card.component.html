@@ -8,6 +8,7 @@
   <mat-card-actions>
     <a *ngIf="!isAuctionTimePassed()" [routerLink]="['/auction', address]"  mat-button color="primary">Details and bid</a>
     <button *ngIf="canEnd()" type="button" (click)="endAuction()" mat-button color="accent">End auction</button>
+    <button style="margin-left: 130px;" *ngIf="!canEnd() && isAuctionTimePassed() && canWithdraw" type="button" (click)="withdraw()" mat-button color="accent">Withdraw</button>
     <h2 *ngIf="!canEnd() && isAuctionTimePassed()" style="color: #45a049; padding-left: 110px">Auction ended</h2>
   </mat-card-actions>
   <mat-card-footer *ngIf="canRate">

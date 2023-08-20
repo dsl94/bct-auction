@@ -21,6 +21,7 @@ export class CardComponent implements OnInit {
     highestBidder: ''
   }
   canRate = false;
+  canWithdraw = false;
   constructor(private auctionFactoryService: AuctionFactorySmartContractService, private web3Service: Web3Service, private auctionService: SimpleAuctionSmartContractService) {}
 
   ngOnInit(): void {
@@ -32,6 +33,7 @@ export class CardComponent implements OnInit {
       this.details = d;
       if (this.details.auctionName != '') {
         this.loadCanRate();
+        this.loadCanWithdraw();
       }
     });
   }
@@ -39,6 +41,9 @@ export class CardComponent implements OnInit {
   loadCanRate() {
     this.auctionFactoryService.canRate(this.details.seller, this.address).then(r => {
       this.canRate = r;
+      if (this.details.highestBidder != this.web3Service.getAccount()) {
+        this.canRate = false;
+      }
     });
   }
 
@@ -100,5 +105,17 @@ export class CardComponent implements OnInit {
     const ended = this.details.ended;
 
     return isBuyer && ended;
+  }
+
+  loadCanWithdraw() {
+    this.auctionService.canWithdraw(this.address,this.web3Service.getAccount()).then(d => {
+      this.canWithdraw = d;
+    });
+  }
+
+  withdraw() {
+    this.auctionService.withdraw(this.address).then(d => {
+      this.loadCanWithdraw();
+    });
   }
 }
