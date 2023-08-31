@@ -86,7 +86,6 @@ describe('Auction factory testing', function() {
         await sleep(100);
         await auctionFactorySmartContract.methods.rate(accounts[0], auctionAddresses[1], 5).call({from: accounts[1]});
         let ratings = await auctionFactorySmartContract.methods.ratings(accounts[0]).call({from: accounts[1]});
-        console.log(ratings)
         assert(ratings)
     });
 });
